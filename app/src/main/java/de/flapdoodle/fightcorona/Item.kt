@@ -1,4 +1,4 @@
-package de.flapdoodle.einkauf
+package de.flapdoodle.fightcorona
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

@@ -1,4 +1,4 @@
-package de.flapdoodle.einkauf
+package de.flapdoodle.fightcorona
 
 /*
  * Copyright (C) 2017 Google Inc.

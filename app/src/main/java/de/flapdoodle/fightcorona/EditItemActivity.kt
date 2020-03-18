@@ -1,4 +1,4 @@
-package de.flapdoodle.einkauf
+package de.flapdoodle.fightcorona
 
 /*
  * Copyright (C) 2017 Google Inc.
@@ -25,27 +25,40 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
-import java.text.DecimalFormat
+import java.lang.IllegalArgumentException
 import java.text.ParseException
 
 /**
  * Activity for entering a word.
  */
 
-class NewItemActivity : AppCompatActivity() {
+class EditItemActivity : AppCompatActivity() {
 
     private lateinit var editNameView: EditText
     private lateinit var editPriceView: EditText
 
     private var name: String? = null
     private var price: MONEY? = null
+    private var id: Int? = null
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_item)
+        setContentView(R.layout.activity_edit_item)
         editNameView = findViewById(R.id.edit_word)
-        editPriceView = findViewById(R.id.new_price)
+        editPriceView = findViewById(R.id.edit_price)
+
+        id = intent.getIntExtra(EXTRA_REPLY_ID,-1)
+        if (id==-1) throw IllegalArgumentException("invalid id: $id")
+
+        name = intent.getStringExtra(EXTRA_REPLY_NAME)
+        price = intent.getIntExtra(EXTRA_REPLY_PRICE, 0)
+        //getExtraData()
+
+        editNameView.setText(name, TextView.BufferType.EDITABLE);
+        editPriceView.setText(Numbers.amountAsString(price), TextView.BufferType.EDITABLE);
+
 
         val button = findViewById<Button>(R.id.button_save)
         button.setOnClickListener {
@@ -53,6 +66,7 @@ class NewItemActivity : AppCompatActivity() {
             if (name==null || price==null) {
                 setResult(Activity.RESULT_CANCELED, replyIntent)
             } else {
+                replyIntent.putExtra(EXTRA_REPLY_ID, id!!)
                 replyIntent.putExtra(EXTRA_REPLY_NAME, name!!)
                 replyIntent.putExtra(EXTRA_REPLY_PRICE, price!!)
                 setResult(Activity.RESULT_OK, replyIntent)
@@ -82,8 +96,9 @@ class NewItemActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val EXTRA_REPLY_NAME = "de.flapdoodle.einkauf.REPLY.name"
-        const val EXTRA_REPLY_PRICE = "de.flapdoodle.einkauf.REPLY.price"
+        const val EXTRA_REPLY_ID = "de.flapdoodle.fightcorona.REPLY.id"
+        const val EXTRA_REPLY_NAME = "de.flapdoodle.fightcorona.REPLY.name"
+        const val EXTRA_REPLY_PRICE = "de.flapdoodle.fightcorona.REPLY.price"
     }
 
     class Validate(private val onChange: (String) -> Unit) : TextWatcher {

@@ -1,4 +1,4 @@
-package de.flapdoodle.einkauf
+package de.flapdoodle.fightcorona
 
 import android.view.View
 import android.widget.AdapterView
